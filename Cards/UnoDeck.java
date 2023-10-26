@@ -9,7 +9,7 @@ public class UnoDeck {
     private Deque<UnoCard> deck = new ArrayDeque<>();
 
     public UnoDeck(){
-        
+
         /*
          * all card counts were based from the official uno website
          * https://www.unovariations.com/official-uno-rules#:~:text=A%20standard%20deck%20of%20Uno,blue%2C%20green%2C%20and%20yellow)
@@ -68,6 +68,7 @@ public class UnoDeck {
         List<UnoCard> draw2s = new ArrayList<>();
         for(Color c : Color.values()){
             for(int i = 0; i < 2; i++){
+                if(c.equals(Color.WILD)) continue;
                 draw2s.add(new SpecialCard(c, SpecialType.DRAWTWO));
             }
         }
@@ -76,6 +77,7 @@ public class UnoDeck {
         List<SpecialCard> reverse = new ArrayList<>();
         for(Color c: Color.values()){
             for(int i = 0; i < 2; i++){
+                if(c.equals(Color.WILD)) continue;
                 reverse.add(new SpecialCard(c, SpecialType.REVERSE));
             }
         }
