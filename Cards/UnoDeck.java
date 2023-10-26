@@ -1,12 +1,21 @@
 package Cards;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class UnoDeck {
-    //face value cards
-    //red
+    private Deque<UnoCard> deck = new ArrayDeque<>();
+
     public UnoDeck(){
+        
+        /*
+         * all card counts were based from the official uno website
+         * https://www.unovariations.com/official-uno-rules#:~:text=A%20standard%20deck%20of%20Uno,blue%2C%20green%2C%20and%20yellow)
+         */
+
+        //red
         UnoCard r0 = new NormalCard(Color.RED, 0);
         List<UnoCard> redFaceValueCards = new ArrayList<>();
         redFaceValueCards.add(r0);
@@ -76,7 +85,14 @@ public class UnoDeck {
         for(int i = 0; i < 4; i++){
             wild4.add(new SpecialCard(Color.WILD, SpecialType.DRAWFOUR));
         }
+
+        deck.addAll(redFaceValueCards);
+        deck.addAll(greenFaceValueCards);
+        deck.addAll(blueFaceValueCards);
+        deck.addAll(yellowFaceValueCards);
+        deck.addAll(skips);
+        deck.addAll(reverse);
+        deck.addAll(draw2s);
+        deck.addAll(wild4);
     }
-
-
 }
