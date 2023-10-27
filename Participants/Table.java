@@ -12,8 +12,8 @@ public class Table {
         tableDeck.push(u);
     }
 
-    public void showTopCard(){
-        System.out.println(tableDeck.peekLast());
+    public UnoCard showTopCard(){
+        return tableDeck.peekLast();
     }
 
     public Deque<UnoCard> returnCards(){
@@ -21,5 +21,9 @@ public class Table {
         toReturn.addAll(tableDeck);
         toReturn.pollFirst();
         return toReturn;
+    }
+
+    public void showTable(){
+        System.out.println(tableDeck);
     }
 }

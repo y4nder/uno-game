@@ -8,8 +8,11 @@ public class User extends Player implements ThrowCardStrategery{
     public UnoCard throwCard(UnoCard fromTable) {
         UnoCard u = null;
         showMyCards();
-        int index = getInput("Choose card");
-        u = myCards.get(index);
+        do{
+            int index = getInput("Choose card");
+            u = myCards.get(index);
+        }
+        while(!validCard(u, fromTable));
         return u;
     }
 }

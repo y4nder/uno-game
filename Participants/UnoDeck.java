@@ -136,17 +136,22 @@ public class UnoDeck {
         return UnoDeck.size();
     }
 
-    public List<UnoCard> giveCards(int howMany){
+    public void giveCards(int howMany, Player player){
         List<UnoCard> l = new ArrayList<>();
         for(int i = 0; i < howMany; i++){
             l.add(UnoDeck.pollFirst());
         }
-        return l;
+        player.drawCard(l);
     }
 
     public void retrieveCards(Deque<UnoCard> u){
         UnoDeck.addAll(u);
     }
+
+    public UnoCard drawOne(){
+        return UnoDeck.pollFirst();
+    }
+
 
     //helper methods
     private boolean isEmpty(){

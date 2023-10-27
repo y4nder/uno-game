@@ -1,6 +1,10 @@
 package Participants;
 import java.util.ArrayList;
 import java.util.List;
+
+import Cards.NormalCard;
+import Cards.SpecialCard;
+import Cards.SpecialType;
 import Cards.UnoCard;
 
 import java.util.Scanner;
@@ -11,8 +15,6 @@ abstract class Player {
     protected Player playerLeft;
     protected Player playerRight;
     
-    //action strategy
-
     public Player(){
         this.myCards = new ArrayList<>();
         this.user = false;
@@ -63,9 +65,10 @@ abstract class Player {
             return;
         }
 
+        System.out.println("-----My Cards-----");
         int i = 0;
         for(UnoCard u : myCards){
-            System.out.print(i + ": ");
+            System.out.print(i + " - ");
             u.showCard();
             i++;
             System.out.println();
@@ -90,6 +93,27 @@ abstract class Player {
         }
         while(choice < 0 || choice > myCards.size());
         return choice;
+    }
+
+    public boolean validCard(UnoCard u, UnoCard fromTable){
+        if(u.getColor() == fromTable.getColor()){
+            return true;
+        }
+
+        if(u instanceof NormalCard && u instanceof NormalCard){
+            if(((NormalCard) u).getFaceValue() == ((NormalCard) fromTable).getFaceValue()){
+                return true;
+            }
+        }
+
+        if(u instanceof SpecialCard && u instanceof SpecialCard){
+            if( ((SpecialCard) u).getType() == ((SpecialCard) fromTable).getType() ){
+                return true;
+            }
+        }
+        
+        System.out.println("Cannot throw this card");
+        return false;
     }
 }
 
