@@ -1,4 +1,4 @@
-package Cards;
+package Participants;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -6,15 +6,21 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Random;
 
+import Cards.Color;
+import Cards.NormalCard;
+import Cards.SpecialCard;
+import Cards.SpecialType;
+import Cards.UnoCard;
+
 public class UnoDeck {
-    private Deque<UnoCard> deck = new ArrayDeque<>();
+    private Deque<UnoCard> UnoDeck = new ArrayDeque<>();
 
     public UnoDeck(){
 
         /*
          * all card counts were based from the official uno website
          * https://www.unovariations.com/official-uno-rules#:~:text=A%20standard%20deck%20of%20Uno,blue%2C%20green%2C%20and%20yellow)
-         */
+        */
 
         //red
         UnoCard r0 = new NormalCard(Color.RED, 0);
@@ -89,18 +95,18 @@ public class UnoDeck {
             wild4.add(new SpecialCard(Color.WILD, SpecialType.DRAWFOUR));
         }
 
-        deck.addAll(redFaceValueCards);
-        deck.addAll(greenFaceValueCards);
-        deck.addAll(blueFaceValueCards);
-        deck.addAll(yellowFaceValueCards);
-        deck.addAll(skips);
-        deck.addAll(reverse);
-        deck.addAll(draw2s);
-        deck.addAll(wild4);
+        UnoDeck.addAll(redFaceValueCards);
+        UnoDeck.addAll(greenFaceValueCards);
+        UnoDeck.addAll(blueFaceValueCards);
+        UnoDeck.addAll(yellowFaceValueCards);
+        UnoDeck.addAll(skips);
+        UnoDeck.addAll(reverse);
+        UnoDeck.addAll(draw2s);
+        UnoDeck.addAll(wild4);
     }
 
     public void displayDeck(){
-        for(UnoCard u : deck){
+        for(UnoCard u : UnoDeck){
             u.showCard();
             System.out.println();
         }
@@ -108,7 +114,7 @@ public class UnoDeck {
 
     public void shuffeDeck(){
         Random random = new Random();
-        UnoCard[] templist = deck.toArray(new UnoCard[deck.size()]);
+        UnoCard[] templist = UnoDeck.toArray(new UnoCard[UnoDeck.size()]);
         int n = templist.length;
 
         for(int i = n-1 ; i > 0; i--){
@@ -119,14 +125,35 @@ public class UnoDeck {
             templist[j] = temp;
         }
         
-        this.deck = new ArrayDeque<>();
+        this.UnoDeck = new ArrayDeque<>();
 
         for(UnoCard u : templist){
-            this.deck.add(u);
+            this.UnoDeck.add(u);
         }
     }
 
     public int cardCount(){
-        return deck.size();
+        return UnoDeck.size();
+    }
+
+    public List<UnoCard> giveCards(int howMany){
+        List<UnoCard> l = new ArrayList<>();
+        for(int i = 0; i < howMany; i++){
+            l.add(UnoDeck.pollFirst());
+        }
+        return l;
+    }
+
+    public void retrieveCards(Deque<UnoCard> u){
+        UnoDeck.addAll(u);
+    }
+
+    //helper methods
+    private boolean isEmpty(){
+        return UnoDeck.size() == 0;
+    }
+
+    private boolean notEnoughCards(int howMany){
+        return UnoDeck.size() < howMany;
     }
 }

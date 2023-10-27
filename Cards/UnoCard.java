@@ -1,6 +1,6 @@
 package Cards;
 
-abstract class UnoCard {
+public abstract class UnoCard {
     protected Color color;
 
     public Color getColor(){
