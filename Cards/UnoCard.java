@@ -6,4 +6,8 @@ abstract class UnoCard {
     public Color getColor(){
         return color;
     }
+
+    public void showCard(){
+        System.out.print(color);
+    }
 }

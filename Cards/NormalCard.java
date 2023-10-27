@@ -11,4 +11,9 @@ public class NormalCard extends UnoCard{
     public int getFaceValue(){
         return faceValue;
     }
+
+    public void showCard(){
+        super.showCard();
+        System.out.print(" " + faceValue);
+    }
 }

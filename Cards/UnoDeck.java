@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Random;
 
 public class UnoDeck {
     private Deque<UnoCard> deck = new ArrayDeque<>();
@@ -96,5 +97,36 @@ public class UnoDeck {
         deck.addAll(reverse);
         deck.addAll(draw2s);
         deck.addAll(wild4);
+    }
+
+    public void displayDeck(){
+        for(UnoCard u : deck){
+            u.showCard();
+            System.out.println();
+        }
+    }
+
+    public void shuffeDeck(){
+        Random random = new Random();
+        UnoCard[] templist = deck.toArray(new UnoCard[deck.size()]);
+        int n = templist.length;
+
+        for(int i = n-1 ; i > 0; i--){
+            int j = random.nextInt(i + 1);
+
+            UnoCard temp = templist[i];
+            templist[i] = templist[j];
+            templist[j] = temp;
+        }
+        
+        this.deck = new ArrayDeque<>();
+
+        for(UnoCard u : templist){
+            this.deck.add(u);
+        }
+    }
+
+    public int cardCount(){
+        return deck.size();
     }
 }

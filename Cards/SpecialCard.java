@@ -11,4 +11,9 @@ public class SpecialCard extends UnoCard{
     public SpecialType getType(){
         return type;
     }
+
+    public void showCard(){
+        super.showCard();
+        System.out.print(" " + type);
+    }
 }
