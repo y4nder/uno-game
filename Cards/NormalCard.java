@@ -12,11 +12,10 @@ public class NormalCard extends UnoCard{
         return faceValue;
     }
 
-    public void showCard(){
-        super.showCard();
+    public String showCard(){
         if(faceValue == 99)
-            System.out.print(" ANY");
+            return super.showCard() + " ANY";
         else
-            System.out.print(" " + faceValue);
+            return super.showCard() + " " + faceValue;
     }
 }

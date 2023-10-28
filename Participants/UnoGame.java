@@ -51,22 +51,22 @@ public class UnoGame {
         UnoCard currentTop = top;
         
         if(top instanceof NormalCard){
-            System.out.println("\n--------------------------------------------------");
-            System.out.println(currentPlayer.getPlayerName() + "'s turn");
-            System.out.print("Top card is a ");
-            currentTop.showCard();
-            System.out.println();
+            type("\n--------------------------------------------------");
+            type(currentPlayer.getPlayerName() + "'s turn");
+            System.out.println("Top card is a " + currentTop.showCard());
+            type();
             UnoCard toThrow = currentPlayer.throwCard(currentTop);
             if(toThrow != null){
                 currentTop = toThrow;
+                type(currentPlayer.getPlayerName() + " throws a " + toThrow.showCard());
                 if(currentPlayer.getCurrentCardCount() == 0){
-                    System.out.println("\n" + currentPlayer.getPlayerName() + " won!!");
+                    type("\n" + currentPlayer.getPlayerName() + " won!!");
                     return;
                 }
             }
             else{
-                System.out.println(currentPlayer.getPlayerName() + " does not have any playable cards");
-                System.out.println(currentPlayer.getPlayerName() + " will draw 1 card");
+                type(currentPlayer.getPlayerName() + " does not have any playable cards");
+                type(currentPlayer.getPlayerName() + " will draw 1 card");
                 unoDeck.giveCards(1, currentPlayer);
             }
             PlayUno(r.rotate(currentPlayer), currentTop);
@@ -74,14 +74,14 @@ public class UnoGame {
         else{    
             //if draw two
             if(((SpecialCard)currentTop).getType().equals(SpecialType.DRAWTWO)){
-                System.out.println(currentPlayer.getPlayerName() + "draws 2 cards");
+                type("\n" + currentPlayer.getPlayerName() + " draws 2 cards");
                 unoDeck.giveCards(2, currentPlayer);
                 PlayUno(r.rotate(currentPlayer), new NormalCard(currentTop.getColor(), 99));
             }
 
             //if reverse
             if(((SpecialCard)currentTop).getType().equals(SpecialType.REVERSE)){
-                System.out.println("\nThe rotation is reversed");
+                type("\nThe rotation is reversed");
                 if(r instanceof RotateLeft){
                     r = new RotateRight();
                 }
@@ -93,14 +93,14 @@ public class UnoGame {
             
             //if skip
             if(((SpecialCard)currentTop).getType().equals(SpecialType.SKIP)){
-                System.out.println("\n" + currentPlayer.getPlayerName() + " was skipped");
+                type("\n" + currentPlayer.getPlayerName() + " was skipped");
                 PlayUno(r.rotate(r.rotate(currentPlayer)), new NormalCard(currentTop.getColor(), 99));
             }
             
             //if wild draw four
             if(((SpecialCard)currentTop).getType().equals(SpecialType.DRAWFOUR)){
                 Color choice = getColorChoice();
-                System.out.println("\n" +  currentPlayer.getPlayerName() + "draws 4 cards");
+                type("\n" +  currentPlayer.getPlayerName() + " draws 4 cards");
                 unoDeck.giveCards(4, currentPlayer);
                 currentTop = new NormalCard(choice, 99);
                 PlayUno(r.rotate(currentPlayer), currentTop);
@@ -112,27 +112,25 @@ public class UnoGame {
     //helper method
     public boolean validStartCard(UnoCard u){
         if(u instanceof SpecialCard){
-            System.out.print("first draw was a ");
-            u.showCard();
-            System.out.println();
-            System.out.println("Drawing first card again");
+            System.out.println("first draw was a " + u.showCard());
+            type();
+            type("Drawing first card again");
             return false;
         }
         return true;
     }
 
     public void showCardFromTable(){
-        System.out.print("Top Card is a ");
-        table.getTopCard().showCard();
-        System.out.println();
+        System.out.println("Top Card is a " + table.getTopCard().showCard());
+        type();
     }
 
     public Color getColorChoice(){
         int choice;
-        System.out.println();
+        type();
         for(Color c : Color.values()){
             if(c == Color.WILD) continue;
-            System.out.println(c.ordinal() + ": " + c);
+            type(c.ordinal() + ": " + c);
         }
 
         do{
@@ -147,6 +145,24 @@ public class UnoGame {
         }
 
         return null;
+    }
+
+    public void type(String string){
+        for(int i = 0; i < string.length(); i++)
+        {
+            System.out.print(string.charAt(i));
+            try{
+                Thread.sleep(5); 
+            } 
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println();
+    }
+
+    public void type(){
+        System.out.println();
     }
 
 }

@@ -12,8 +12,7 @@ public class SpecialCard extends UnoCard{
         return type;
     }
 
-    public void showCard(){
-        super.showCard();
-        System.out.print(" " + type);
+    public String showCard(){
+        return super.showCard() + " " + type;
     }
 }

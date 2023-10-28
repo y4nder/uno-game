@@ -107,7 +107,7 @@ public class UnoDeck {
 
     public void displayDeck(){
         for(UnoCard u : UnoDeck){
-            u.showCard();
+            System.out.println(u.showCard());
             System.out.println();
         }
     }

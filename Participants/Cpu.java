@@ -9,10 +9,12 @@ public class Cpu extends Player{
     @Override
     public UnoCard throwCard(UnoCard fromTable) {
         UnoCard toThrow = null;
-        int index = myCards.indexOf(fromTable);
-        if(index != -1){
-            toThrow = myCards.get(index);
-            myCards.remove(index);
+        for(UnoCard u : myCards){
+            if(validCard(u, fromTable)){
+                toThrow = u;
+                myCards.remove(toThrow);
+                break;
+            }
         }
         return toThrow;
     }

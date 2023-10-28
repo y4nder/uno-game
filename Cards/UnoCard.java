@@ -7,7 +7,7 @@ public abstract class UnoCard {
         return color;
     }
 
-    public void showCard(){
-        System.out.print(color);
+    public String showCard(){
+        return color.toString();
     }
 }

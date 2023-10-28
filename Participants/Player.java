@@ -68,10 +68,8 @@ public abstract class Player {
         System.out.println("\n***** " + playerName + "'s cards *****");
         int i = 0;
         for(UnoCard u : myCards){
-            System.out.print("  " + i + " - ");
-            u.showCard();
+            System.out.println("  " + i + " - " + u.showCard());
             i++;
-            System.out.println();
         }
     }
 
