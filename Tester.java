@@ -1,29 +1,18 @@
-import Cards.SpecialCard;
-import Cards.UnoCard;
+import java.util.List;
+import Cards.*;
 import Participants.*;
 public class Tester {
     public static void main(String[] args){
-        // UnoDeck unoDeck = new UnoDeck();
-        // Table table = new Table();
-        // User user = new User();
+        User p1 = new User("lebron");
+        Cpu p2 = new Cpu("Jimmy");
+        Player p3 = new User("Curry");
+        Cpu p4 = new Cpu("Luka");
 
-        // unoDeck.shuffeDeck();
-        // unoDeck.giveCards(7, user);
+        RotationSetup set = new RotationSetup();
+        set.setupPlayers(List.of(p1, p2, p3, p4));
 
-        // //algo for starting draw
-        // UnoCard start;
-        // do{
-        //     start = unoDeck.drawOne();
-        //     table.addToTableDeck(start);
-        // }
-        // while(start instanceof SpecialCard);
-
-        // UnoCard top = table.showTopCard();
-        // System.out.print("Top card is: ");
-        // top.showCard();
-        // System.out.println();
+        UnoGame unoGame = new UnoGame(set.getFirstPlayer());
+        unoGame.testStart();
         
-        // user.throwCard(top);
-
     }
 }

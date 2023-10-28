@@ -12,8 +12,8 @@ public class Table {
         tableDeck.push(u);
     }
 
-    public UnoCard showTopCard(){
-        return tableDeck.peekLast();
+    public UnoCard getTopCard(){
+        return tableDeck.peekFirst();
     }
 
     public Deque<UnoCard> returnCards(){

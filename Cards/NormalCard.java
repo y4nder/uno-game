@@ -14,6 +14,9 @@ public class NormalCard extends UnoCard{
 
     public void showCard(){
         super.showCard();
-        System.out.print(" " + faceValue);
+        if(faceValue == 99)
+            System.out.print(" ANY");
+        else
+            System.out.print(" " + faceValue);
     }
 }
