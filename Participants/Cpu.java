@@ -3,6 +3,9 @@ package Participants;
 import Cards.UnoCard;
 
 public class Cpu extends Player implements ThrowCardStrategery{
+    public Cpu(String playerName){
+        this.playerName = playerName;
+    }
     @Override
     public UnoCard throwCard(UnoCard fromTable) {
         UnoCard toThrow = null;

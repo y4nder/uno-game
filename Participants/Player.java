@@ -4,25 +4,28 @@ import java.util.List;
 
 import Cards.NormalCard;
 import Cards.SpecialCard;
-import Cards.SpecialType;
 import Cards.UnoCard;
 
 import java.util.Scanner;
 
 abstract class Player {
+    protected String playerName;
     protected List<UnoCard> myCards; 
-    protected boolean user; 
     protected Player playerLeft;
     protected Player playerRight;
     
     public Player(){
+        this.playerName = "";
         this.myCards = new ArrayList<>();
-        this.user = false;
         this.playerLeft = null;
         this.playerRight = null;
     }
 
     //getters
+    public String getPlayerName() {
+        return playerName;
+    }
+
     public Player getPlayerLeft() {
         return playerLeft;
     }
@@ -33,10 +36,6 @@ abstract class Player {
 
     public List<UnoCard> getMyCards() {
         return myCards;
-    }
-
-    public boolean isUser() {
-        return user;
     }
 
     
@@ -51,10 +50,6 @@ abstract class Player {
 
     public void setMyCards(List<UnoCard> myCards) {
         this.myCards = myCards;
-    }
-
-    public void setUser(boolean user) {
-        this.user = user;
     }
 
     
@@ -91,8 +86,17 @@ abstract class Player {
             System.out.println(instructions);
             choice = scan.nextInt();
         }
-        while(choice < 0 || choice > myCards.size());
+        while(!validChoice(choice));
         return choice;
+    }
+
+    public boolean validChoice(int choice){
+        if(choice < 0 || choice > myCards.size() - 1){
+            System.out.println("Invalid choice");
+            return false;
+        }
+        return true;
+
     }
 
     public boolean validCard(UnoCard u, UnoCard fromTable){
@@ -100,18 +104,18 @@ abstract class Player {
             return true;
         }
 
-        if(u instanceof NormalCard && u instanceof NormalCard){
-            if(((NormalCard) u).getFaceValue() == ((NormalCard) fromTable).getFaceValue()){
+        if(fromTable instanceof NormalCard){
+            if(u instanceof NormalCard && ((NormalCard)u).getFaceValue() == ((NormalCard)fromTable).getFaceValue()){
+                return true;
+            }   
+        }
+
+        if(fromTable instanceof SpecialCard){
+            if(u instanceof SpecialCard && ((SpecialCard)u).getType().equals(((SpecialCard)fromTable).getType())){
                 return true;
             }
         }
 
-        if(u instanceof SpecialCard && u instanceof SpecialCard){
-            if( ((SpecialCard) u).getType() == ((SpecialCard) fromTable).getType() ){
-                return true;
-            }
-        }
-        
         System.out.println("Cannot throw this card");
         return false;
     }
