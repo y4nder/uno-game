@@ -26,4 +26,8 @@ public class Table {
     public void showTable(){
         System.out.println(tableDeck);
     }
+
+    public Deque<UnoCard> getTableDeck(){
+        return tableDeck;
+    }
 }

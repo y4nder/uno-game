@@ -14,6 +14,7 @@ public abstract class Player {
     protected List<UnoCard> myCards; 
     protected Player playerLeft;
     protected Player playerRight;
+    static Scanner scan = new Scanner(System.in);
     
     public Player(){
         this.playerName = "";
@@ -24,7 +25,10 @@ public abstract class Player {
 
     //getters
     public String getPlayerName() {
-        return playerName;
+        if(getCurrentCardCount() == 1){
+            return playerName + " cards(1)!";
+        }
+        return "(" + myCards.size() + ") " + playerName;
     }
 
     public Player getPlayerLeft() {
@@ -72,7 +76,7 @@ public abstract class Player {
             i++;
         }
     }
-
+ 
     public void giveBackCard(UnoCard u){
         myCards.add(u);
     }
@@ -83,13 +87,22 @@ public abstract class Player {
 
     public abstract UnoCard throwCard(UnoCard fromTable);
 
+    public abstract Color chooseColor();
+
     public int getCurrentCardCount(){
         return myCards.size();
     }
 
+    public boolean hasNoMoreCards(){
+        return myCards.size() == 0;
+    }
+
+    public boolean uno(){
+        return myCards.size() == 1;
+    }
+
     //helper method
     public int getInput(String instructions){
-        Scanner scan = new Scanner(System.in);
         int choice;
         do{            
             System.out.print(instructions);
@@ -109,6 +122,10 @@ public abstract class Player {
     }
 
     public boolean validCard(UnoCard u, UnoCard fromTable){
+        if(u == null){
+            return false;
+        }
+
         if(u.getColor() == fromTable.getColor()){
             return true;
         }

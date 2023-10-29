@@ -1,5 +1,4 @@
 package Participants;
-import java.util.Scanner;
 import Cards.*;
 
 public class UnoGame {
@@ -7,7 +6,6 @@ public class UnoGame {
     private Table table;
     private Player startingPlayer;
     private Rotation r;
-    private static Scanner scan = new Scanner(System.in);
 
     public UnoGame(Player startingPlayer){
         this.startingPlayer = startingPlayer;
@@ -28,7 +26,8 @@ public class UnoGame {
         Player first = start;
         Player current = first;
         do{
-            unoDeck.giveCards(7, current);
+            // unoDeck.giveCards(7, current);
+            distributeCards(7, current);
             current = current.getPlayerRight();
         }
         while(!current.equals(first));
@@ -49,39 +48,60 @@ public class UnoGame {
         //determine if player is user or cpu
         Player currentPlayer = player;
         UnoCard currentTop = top;
+
+        type("\n--------------------------------------------------");
         
-        if(top instanceof NormalCard){
-            type("\n--------------------------------------------------");
-            type(currentPlayer.getPlayerName() + "'s turn");
-            System.out.println("Top card is a " + currentTop.showCard());
+        if(aNormalCard(currentTop)){
+            type("Top card is a " + currentTop.showCard());
             type();
+            type(currentPlayer.getPlayerName().toUpperCase() + "'s turn");
             UnoCard toThrow = currentPlayer.throwCard(currentTop);
             if(toThrow != null){
                 currentTop = toThrow;
                 type(currentPlayer.getPlayerName() + " throws a " + toThrow.showCard());
-                if(currentPlayer.getCurrentCardCount() == 0){
+
+                if(aDrawFour(currentTop)){
+                    Color choice = currentPlayer.chooseColor();
+                    currentTop = new SpecialCard(choice, SpecialType.DRAWFOUR);
+                }
+
+                if(currentPlayer.hasNoMoreCards()){
                     type("\n" + currentPlayer.getPlayerName() + " won!!");
                     return;
                 }
+
+                if(currentPlayer.uno()){
+                    type(currentPlayer.getPlayerName() + " yells UNO!");
+                }
+
             }
             else{
                 type(currentPlayer.getPlayerName() + " does not have any playable cards");
                 type(currentPlayer.getPlayerName() + " will draw 1 card");
-                unoDeck.giveCards(1, currentPlayer);
+                // unoDeck.giveCards(1, currentPlayer);
+                distributeCards(1, currentPlayer);
+                
+                if(currentPlayer.hasThrowableCard(currentTop)){
+                    PlayUno(currentPlayer, currentTop);
+                    return;
+                }
             }
-            PlayUno(r.rotate(currentPlayer), currentTop);
+
+        PlayUno(r.rotate(currentPlayer), currentTop);
+
         }
         else{    
             //if draw two
-            if(((SpecialCard)currentTop).getType().equals(SpecialType.DRAWTWO)){
-                type("\n" + currentPlayer.getPlayerName() + " draws 2 cards");
-                unoDeck.giveCards(2, currentPlayer);
+            if(aDrawTwo(currentTop)){
+                type("\n" + currentPlayer.getPlayerName() + " draws 2 cards and LOSES their Turn");
+                // unoDeck.giveCards(2, currentPlayer);
+                distributeCards(2, currentPlayer);
                 PlayUno(r.rotate(currentPlayer), new NormalCard(currentTop.getColor(), 99));
             }
 
             //if reverse
-            if(((SpecialCard)currentTop).getType().equals(SpecialType.REVERSE)){
-                type("\nThe rotation is reversed");
+            if(aReverse(currentTop)){
+                type("\nThe rotation is reversed 🔀");
                 if(r instanceof RotateLeft){
                     r = new RotateRight();
                 }
@@ -92,20 +112,21 @@ public class UnoGame {
             }
             
             //if skip
-            if(((SpecialCard)currentTop).getType().equals(SpecialType.SKIP)){
-                type("\n" + currentPlayer.getPlayerName() + " was skipped");
+            if(aSkip(currentTop)){
+                type("\n" + currentPlayer.getPlayerName() + " was skipped, they LOSE their turn");
                 PlayUno(r.rotate(r.rotate(currentPlayer)), new NormalCard(currentTop.getColor(), 99));
             }
             
             //if wild draw four
-            if(((SpecialCard)currentTop).getType().equals(SpecialType.DRAWFOUR)){
-                Color choice = getColorChoice();
-                type("\n" +  currentPlayer.getPlayerName() + " draws 4 cards");
-                unoDeck.giveCards(4, currentPlayer);
-                currentTop = new NormalCard(choice, 99);
+            if(aDrawFour(currentTop)){
+                type("\n" +  currentPlayer.getPlayerName() + " draws 4 cards and LOSES their turn");
+                //unoDeck.giveCards(4, currentPlayer);
+                distributeCards(5, currentPlayer);
+                currentTop = new NormalCard(currentTop.getColor(), 99);
                 PlayUno(r.rotate(currentPlayer), currentTop);
             }
         }
+
         return;
     }
 
@@ -125,34 +146,13 @@ public class UnoGame {
         type();
     }
 
-    public Color getColorChoice(){
-        int choice;
-        type();
-        for(Color c : Color.values()){
-            if(c == Color.WILD) continue;
-            type(c.ordinal() + ": " + c);
-        }
-
-        do{
-            System.out.print("  Please Choose a color to play: ");
-            choice = scan.nextInt();
-        }
-        while(choice < 0 && choice > 2);
-
-        for(Color c: Color.values()){
-            if(c.getPosition() == choice);
-            return c;
-        }
-
-        return null;
-    }
-
+    //helper methods
     public void type(String string){
         for(int i = 0; i < string.length(); i++)
         {
             System.out.print(string.charAt(i));
             try{
-                Thread.sleep(5); 
+                Thread.sleep(0); 
             } 
             catch (Exception e) {
                 e.printStackTrace();
@@ -165,4 +165,32 @@ public class UnoGame {
         System.out.println();
     }
 
+    //comparison methods
+    public boolean aNormalCard(UnoCard u){
+        return u instanceof NormalCard;
+    }
+
+    public boolean aDrawFour(UnoCard u){
+        return u instanceof SpecialCard && ((SpecialCard) u).getType().equals(SpecialType.DRAWFOUR);
+    }
+
+    public boolean aDrawTwo(UnoCard u){
+        return ((SpecialCard)u).getType().equals(SpecialType.DRAWTWO);
+    }
+
+    public boolean aReverse(UnoCard u){
+        return ((SpecialCard)u).getType().equals(SpecialType.REVERSE);
+    }
+
+    public boolean aSkip(UnoCard u){
+        return ((SpecialCard)u).getType().equals(SpecialType.SKIP);
+    }
+
+    public void distributeCards(int howMany, Player currentPlayer){
+        if(unoDeck.notEnoughCards(howMany)){
+            type("retrieving cards");
+            unoDeck.retrieveCards(table.returnCards());
+        }
+        unoDeck.giveCards(howMany, currentPlayer);
+    }
 }

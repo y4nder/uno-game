@@ -1,5 +1,6 @@
 package Participants;
 
+import Cards.Color;
 import Cards.UnoCard;
 
 public class User extends Player{
@@ -28,5 +29,30 @@ public class User extends Player{
         }
         while(validity == false);
         return u;
+    }
+
+    @Override
+    public Color chooseColor() {
+        int choice;
+        System.out.println();
+        for(Color c : Color.values()){
+            if(c == Color.WILD) continue;
+            System.out.println(c.ordinal() + ": " + c);
+        }
+
+        do{
+            System.out.print("  Please Choose a color to play: ");
+            choice = scan.nextInt();
+        }
+        while(choice < 0 && choice > 3);
+
+        for(Color c: Color.values()){
+            if(c.ordinal() == choice){
+                System.out.println(playerName + " chose the color " + c);
+                return c;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,11 +1,15 @@
 package Participants;
 
+import java.util.Random;
+
+import Cards.Color;
 import Cards.UnoCard;
 
 public class Cpu extends Player{
     public Cpu(String playerName){
         this.playerName = playerName;
     }
+
     @Override
     public UnoCard throwCard(UnoCard fromTable) {
         UnoCard toThrow = null;
@@ -17,6 +21,20 @@ public class Cpu extends Player{
             }
         }
         return toThrow;
+    }
+
+    @Override
+    public Color chooseColor() {
+        int choice;
+        Random ran = new Random();
+        choice = ran.nextInt(4);
+        for(Color c : Color.values()){
+            if(c.ordinal()  == choice){
+                System.out.println(playerName + " chose the color " + c);
+                return c;
+            }
+        }
+        return null;
     }
     
 }
