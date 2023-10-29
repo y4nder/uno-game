@@ -1,6 +1,8 @@
-package Participants;
+package UnoGameFiles.Misc;
 
 import java.util.List;
+
+import UnoGameFiles.UnoGameEntities.Player;
 
 public class RotationSetup {
     private Player head;

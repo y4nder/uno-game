@@ -1,6 +1,6 @@
-package Cards;
+package UnoGameFiles.Cards;
 
-import Participants.UnoDeck;
+import UnoGameFiles.UnoDeck;
 
 public class testDeck {
     public static void main(String[] args){

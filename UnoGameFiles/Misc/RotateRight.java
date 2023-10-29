@@ -1,4 +1,6 @@
-package Participants;
+package UnoGameFiles.Misc;
+
+import UnoGameFiles.UnoGameEntities.Player;
 
 public class RotateRight implements Rotation{
 

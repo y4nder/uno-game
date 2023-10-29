@@ -1,16 +1,12 @@
-package Participants;
+package UnoGameFiles;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Random;
-
-import Cards.Color;
-import Cards.NormalCard;
-import Cards.SpecialCard;
-import Cards.SpecialType;
-import Cards.UnoCard;
+import UnoGameFiles.Cards.*;
+import UnoGameFiles.UnoGameEntities.*;
 
 public class UnoDeck {
     private Deque<UnoCard> UnoDeck = new ArrayDeque<>();

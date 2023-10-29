@@ -1,13 +1,12 @@
-package Participants;
+package UnoGameFiles.UnoGameEntities;
 import java.util.ArrayList;
 import java.util.List;
-
-import Cards.Color;
-import Cards.NormalCard;
-import Cards.SpecialCard;
-import Cards.UnoCard;
-
 import java.util.Scanner;
+
+import UnoGameFiles.Cards.Color;
+import UnoGameFiles.Cards.NormalCard;
+import UnoGameFiles.Cards.SpecialCard;
+import UnoGameFiles.Cards.UnoCard;
 
 public abstract class Player {
     protected String playerName;

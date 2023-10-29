@@ -1,7 +1,7 @@
-package Participants;
+package UnoGameFiles.UnoGameEntities;
 
-import Cards.Color;
-import Cards.UnoCard;
+import UnoGameFiles.Cards.Color;
+import UnoGameFiles.Cards.UnoCard;
 
 public class User extends Player{
     public User(String playerName){

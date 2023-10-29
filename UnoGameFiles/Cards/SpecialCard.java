@@ -1,4 +1,4 @@
-package Cards;
+package UnoGameFiles.Cards;
 
 public class SpecialCard extends UnoCard{
     private SpecialType type;

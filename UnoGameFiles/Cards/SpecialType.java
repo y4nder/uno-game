@@ -1,4 +1,4 @@
-package Cards;
+package UnoGameFiles.Cards;
 
 public enum SpecialType {
     SKIP,

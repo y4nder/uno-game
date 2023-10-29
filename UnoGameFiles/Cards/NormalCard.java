@@ -1,4 +1,4 @@
-package Cards;
+package UnoGameFiles.Cards;
 
 public class NormalCard extends UnoCard{
     private int faceValue;

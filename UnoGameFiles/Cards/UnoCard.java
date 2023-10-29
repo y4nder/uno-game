@@ -1,4 +1,4 @@
-package Cards;
+package UnoGameFiles.Cards;
 
 public abstract class UnoCard {
     protected Color color;

@@ -1,9 +1,9 @@
-package Participants;
+package UnoGameFiles.UnoGameEntities;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import Cards.UnoCard;
+import UnoGameFiles.Cards.UnoCard;
 
 public class Table {
     private Deque<UnoCard> tableDeck = new ArrayDeque<>();
