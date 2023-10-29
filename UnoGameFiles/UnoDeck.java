@@ -6,6 +6,8 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Random;
 import UnoGameFiles.Cards.*;
+import UnoGameFiles.Cards.CardAttributes.Color;
+import UnoGameFiles.Cards.CardAttributes.SpecialType;
 import UnoGameFiles.UnoGameEntities.*;
 
 public class UnoDeck {
@@ -103,7 +105,7 @@ public class UnoDeck {
 
     public void displayDeck(){
         for(UnoCard u : UnoDeck){
-            System.out.println(u.showCard());
+            System.out.println(u.toString());
             System.out.println();
         }
     }
@@ -150,6 +152,7 @@ public class UnoDeck {
 
     public void retrieveCards(Deque<UnoCard> u){
         UnoDeck.addAll(u);
+        shuffeDeck();
     }
 
     public UnoCard drawOne(){

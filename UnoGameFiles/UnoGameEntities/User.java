@@ -1,24 +1,26 @@
 package UnoGameFiles.UnoGameEntities;
 
-import UnoGameFiles.Cards.Color;
 import UnoGameFiles.Cards.UnoCard;
+import UnoGameFiles.Cards.CardAttributes.Color;
 
 public class User extends Player{
-    public User(String playerName){
-        this.playerName = playerName;
+
+    public User(String playerName) {
+        super(playerName);
     }
+
     @Override
     public UnoCard throwCard(UnoCard fromTable) {
         boolean validity = false;
-        if(!hasThrowableCard(fromTable)){
-            return null;
-        }
         UnoCard u = null;
         showMyCards();
         do{
             int index = getInput("  Choose card: ");
+            if(index == 'x') return null;
             u = myCards.get(index);
-            if(!validCard(u, fromTable)){
+
+
+            if(!isValid(u, fromTable)){
                 System.out.println("    Cannot throw this card");
                 validity = false;
             }

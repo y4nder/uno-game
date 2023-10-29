@@ -2,21 +2,19 @@ package UnoGameFiles.UnoGameEntities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import UnoGameFiles.Cards.Color;
-import UnoGameFiles.Cards.NormalCard;
-import UnoGameFiles.Cards.SpecialCard;
 import UnoGameFiles.Cards.UnoCard;
+import UnoGameFiles.Cards.CardAttributes.Color;
+import UnoGameFiles.Misc.CardValidity;
 
-public abstract class Player {
+public abstract class Player extends CardValidity{
     protected String playerName;
-    protected List<UnoCard> myCards; 
+    protected List<UnoCard> myCards;
     protected Player playerLeft;
     protected Player playerRight;
     static Scanner scan = new Scanner(System.in);
-    
-    public Player(){
-        this.playerName = "";
+
+    public Player(String playerName) {
+        this.playerName = playerName;
         this.myCards = new ArrayList<>();
         this.playerLeft = null;
         this.playerRight = null;
@@ -24,10 +22,7 @@ public abstract class Player {
 
     //getters
     public String getPlayerName() {
-        if(getCurrentCardCount() == 1){
-            return playerName + " cards(1)!";
-        }
-        return "(" + myCards.size() + ") " + playerName;
+        return playerName;
     }
 
     public Player getPlayerLeft() {
@@ -42,8 +37,12 @@ public abstract class Player {
         return myCards;
     }
 
-    
+
     //setters
+    public void setPlayerName(String playerName){
+        this.playerName = playerName;
+    }
+
     public void setPlayerLeft(Player playerLeft) {
         this.playerLeft = playerLeft;
     }
@@ -60,7 +59,7 @@ public abstract class Player {
         this.myCards.add(u);
     }
 
-    
+
     //methods
     public void showMyCards(){
         if(myCards.size() == 0){
@@ -71,11 +70,12 @@ public abstract class Player {
         System.out.println("\n***** " + playerName + "'s cards *****");
         int i = 0;
         for(UnoCard u : myCards){
-            System.out.println("  " + i + " - " + u.showCard());
+            System.out.println("  [" + (i + 1) + "] - " + u.toString());
             i++;
         }
+        System.out.println("  [0] : draw one");
     }
- 
+
     public void giveBackCard(UnoCard u){
         myCards.add(u);
     }
@@ -103,15 +103,16 @@ public abstract class Player {
     //helper method
     public int getInput(String instructions){
         int choice;
-        do{            
+        do{
             System.out.print(instructions);
             choice = scan.nextInt();
+            if(choice == 0) return 'x';
         }
-        while(!validChoice(choice));
-        return choice;
+        while(!validChoice(choice - 1));
+        return choice - 1;
     }
 
-    public boolean validChoice(int choice){
+    private boolean validChoice(int choice){
         if(choice < 0 || choice > myCards.size() - 1){
             System.out.println("Invalid choice");
             return false;
@@ -120,41 +121,9 @@ public abstract class Player {
 
     }
 
-    public boolean validCard(UnoCard u, UnoCard fromTable){
-        if(u == null){
-            return false;
-        }
-
-        if(u.getColor() == fromTable.getColor()){
-            return true;
-        }
-
-        if(fromTable instanceof NormalCard){
-            if(u instanceof SpecialCard && ((SpecialCard)u).getColor().equals(Color.WILD)){
-                return true;
-            }
-
-            if(u instanceof NormalCard && ((NormalCard)u).getFaceValue() == ((NormalCard)fromTable).getFaceValue()){
-                return true;
-            }   
-        }
-
-        if(fromTable instanceof SpecialCard){
-            if(u instanceof SpecialCard && ((SpecialCard)u).getColor().equals(Color.WILD)){
-                return true;
-            }
-
-            if(u instanceof SpecialCard && ((SpecialCard)u).getType().equals(((SpecialCard)fromTable).getType())){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public boolean hasThrowableCard(UnoCard fromTable){
         for(UnoCard u : myCards){
-            if(validCard(u, fromTable)){
+            if(isValid(u, fromTable)){
                 return true;
             }
         }

@@ -1,15 +1,17 @@
 package UnoGameFiles;
 import java.util.List;
 import UnoGameFiles.Cards.*;
+import UnoGameFiles.Cards.CardAttributes.Color;
+import UnoGameFiles.Cards.CardAttributes.SpecialType;
 import UnoGameFiles.Misc.*;
 import UnoGameFiles.UnoGameEntities.*;
 
-public class UnoGame {
+public class UnoGame extends CardValidity {
     private UnoDeck unoDeck;
     private Table table;
     private Player startingPlayer;
     private Rotation r;
-    static int gameSpeed = 5;
+    static int gameSpeed = 0;
 
     public UnoGame(List<Player> allPlayers){
         RotationSetup rSetup = new RotationSetup();
@@ -32,14 +34,15 @@ public class UnoGame {
         type("\n--------------------------------------------------"); 
         if(aNormalCard(currentCard)){
             
-            type("Top card is a " + currentCard.showCard());
+            type("Top card is a " + currentCard.toString());
             type();
             type(currentPlayer.getPlayerName().toUpperCase() + "'s turn");
             UnoCard toThrow = currentPlayer.throwCard(currentCard);
 
             if(toThrow != null){
                 currentCard = toThrow;
-                type(currentPlayer.getPlayerName() + " throws a " + toThrow.showCard());
+                table.addToTableDeck(currentCard);
+                type(currentPlayer.getPlayerName() + " throws a " + toThrow.toString());
 
                 if(aDrawFour(currentCard)){
                     Color choice = currentPlayer.chooseColor();
@@ -59,9 +62,9 @@ public class UnoGame {
             else{
                 type(currentPlayer.getPlayerName() + " does not have any playable cards");
                 type(currentPlayer.getPlayerName() + " will draw 1 card");
-                distributeCards(1, currentPlayer);
-                
-                if(currentPlayer.hasThrowableCard(currentCard)){
+                UnoCard drawn = distributeOneCard();
+                currentPlayer.addACard(drawn);
+                if(isValid(drawn, currentCard)){
                     PlayUno(currentPlayer, currentCard);
                     return;
                 }
@@ -132,7 +135,7 @@ public class UnoGame {
 
     public boolean validStartCard(UnoCard u){
         if(u instanceof SpecialCard){
-            System.out.println("first draw was a " + u.showCard());
+            System.out.println("first draw was a " + u.toString());
             type();
             type("Drawing first card again");
             return false;
@@ -141,7 +144,7 @@ public class UnoGame {
     }
 
     public void showCardFromTable(){
-        System.out.println("Top Card is a " + table.getTopCard().showCard());
+        System.out.println("Top Card is a " + table.getTopCard().toString());
         type();
     }
 
@@ -190,5 +193,13 @@ public class UnoGame {
             unoDeck.retrieveCards(table.returnCards());
         }
         unoDeck.giveCards(howMany, currentPlayer);
+    }
+
+    public UnoCard distributeOneCard(){
+        if(unoDeck.notEnoughCards(1)){
+            type("retrieving cards");
+            unoDeck.retrieveCards(table.returnCards());
+        }
+        return unoDeck.drawOne();
     }
 }

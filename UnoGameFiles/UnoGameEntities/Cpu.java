@@ -2,19 +2,20 @@ package UnoGameFiles.UnoGameEntities;
 
 import java.util.Random;
 
-import UnoGameFiles.Cards.Color;
 import UnoGameFiles.Cards.UnoCard;
+import UnoGameFiles.Cards.CardAttributes.Color;
 
 public class Cpu extends Player{
-    public Cpu(String playerName){
-        this.playerName = playerName;
+
+    public Cpu(String playerName) {
+        super(playerName);
     }
 
     @Override
     public UnoCard throwCard(UnoCard fromTable) {
         UnoCard toThrow = null;
         for(UnoCard u : myCards){
-            if(validCard(u, fromTable)){
+            if(isValid(u, fromTable)){
                 toThrow = u;
                 myCards.remove(toThrow);
                 break;

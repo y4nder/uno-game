@@ -19,7 +19,8 @@ public class Table {
     public Deque<UnoCard> returnCards(){
         Deque<UnoCard> toReturn = new ArrayDeque<>();
         toReturn.addAll(tableDeck);
-        toReturn.pollFirst();
+        tableDeck = new ArrayDeque<>();
+        tableDeck.add(toReturn.pollFirst());
         return toReturn;
     }
 

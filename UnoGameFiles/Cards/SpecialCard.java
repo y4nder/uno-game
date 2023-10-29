@@ -1,21 +1,27 @@
 package UnoGameFiles.Cards;
+import UnoGameFiles.Cards.CardAttributes.*;
 
 public class SpecialCard extends UnoCard{
     private SpecialType type;
-
+    
     public SpecialCard(Color c, SpecialType t){
-        color = c;
+        setColor(c);
         type = t;
     }
-
+    
     public SpecialType getType(){
         return type;
     }
 
-    public String showCard(){
-        if(color.equals(Color.WILD)){
+    public void setType(SpecialType type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString(){
+        if(color == Color.WILD){
             return "WILD " + type; 
         }
-        return super.showCard() + " " + type;
+        return getColor() + " " + type;
     }
 }

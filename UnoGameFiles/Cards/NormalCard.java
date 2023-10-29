@@ -1,10 +1,12 @@
 package UnoGameFiles.Cards;
+import UnoGameFiles.Cards.CardAttributes.Color;
 
 public class NormalCard extends UnoCard{
-    private int faceValue;
+    private static final int ANY_FACE_VALUE = 99;
+    private final int faceValue;
 
     public NormalCard(Color c, int v){
-        color = c;
+        setColor(c);
         faceValue = v;
     }
 
@@ -12,10 +14,11 @@ public class NormalCard extends UnoCard{
         return faceValue;
     }
 
-    public String showCard(){
-        if(faceValue == 99)
-            return super.showCard() + " ANY";
+    @Override
+    public String toString(){
+        if(faceValue == ANY_FACE_VALUE)
+            return getColor() + " ANY";
         else
-            return super.showCard() + " " + faceValue;
+            return getColor() + " " + faceValue;
     }
 }

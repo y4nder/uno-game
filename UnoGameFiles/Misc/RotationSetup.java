@@ -5,26 +5,31 @@ import java.util.List;
 import UnoGameFiles.UnoGameEntities.Player;
 
 public class RotationSetup {
-    private Player head;
-    private Player tail;
+    private Player firstPlayer;
+    private Player lastPlayer;
 
     public RotationSetup(){
-        head = tail = null;
+        firstPlayer = lastPlayer = null;
     }
 
     public void setupPlayers(List<Player> allPlayers){
-        head = tail = allPlayers.get(0);                    //set first player as p1
+        if(allPlayers == null) return;
+
+        firstPlayer = lastPlayer = allPlayers.get(0);
+        allPlayers.get(0).setPlayerName("p" + 1 + " " + allPlayers.get(0).getPlayerName());                   //set first player as p1
+        
         for(int i = 1; i < allPlayers.size(); i++){
-            tail.setPlayerRight(allPlayers.get(i));
-            allPlayers.get(i).setPlayerLeft(tail);
-            tail = allPlayers.get(i);
-            tail.setPlayerRight(null);
+            lastPlayer.setPlayerLeft(allPlayers.get(i));
+            allPlayers.get(i).setPlayerRight(lastPlayer);
+            lastPlayer = allPlayers.get(i);
+            lastPlayer.setPlayerName("p" + (i+1) + " " + lastPlayer.getPlayerName()); 
         }
-        tail.setPlayerRight(head);                          //set last player's left as the first player to rotate
-        head.setPlayerLeft(tail);
+
+        lastPlayer.setPlayerLeft(firstPlayer);                          //set last player's left as the first player to rotate
+        firstPlayer.setPlayerRight(lastPlayer);
     }
 
     public Player getFirstPlayer(){
-        return head;
+        return firstPlayer;
     }
 }
