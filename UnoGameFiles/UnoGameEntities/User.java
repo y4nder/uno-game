@@ -19,7 +19,6 @@ public class User extends Player{
             if(index == 'x') return null;
             u = myCards.get(index);
 
-
             if(!isValid(u, fromTable)){
                 System.out.println("    Cannot throw this card");
                 validity = false;
@@ -28,8 +27,8 @@ public class User extends Player{
                 myCards.remove(index);
                 validity = true;
             }
-        }
-        while(validity == false);
+            
+        }while(validity == false);
         return u;
     }
 

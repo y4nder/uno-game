@@ -1,4 +1,4 @@
-package UnoGameFiles;
+package UnoGameFiles.UnoGameEntities;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -6,9 +6,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Random;
 import UnoGameFiles.Cards.*;
-import UnoGameFiles.Cards.CardAttributes.Color;
-import UnoGameFiles.Cards.CardAttributes.SpecialType;
-import UnoGameFiles.UnoGameEntities.*;
+import UnoGameFiles.Cards.CardAttributes.*;
 
 public class UnoDeck {
     private Deque<UnoCard> UnoDeck = new ArrayDeque<>();
