@@ -137,6 +137,14 @@ public class UnoDeck {
     }
 
     public void giveCards(int howMany, Player player){
+        if(isEmpty()) {
+            return;
+        }
+
+        if(notEnoughCards(howMany)){
+            return;
+        }
+
         List<UnoCard> l = new ArrayList<>();
         for(int i = 0; i < howMany; i++){
             l.add(UnoDeck.pollFirst());
@@ -158,7 +166,7 @@ public class UnoDeck {
         return UnoDeck.size() == 0;
     }
 
-    private boolean notEnoughCards(int howMany){
+    public boolean notEnoughCards(int howMany){
         return UnoDeck.size() < howMany;
     }
 }

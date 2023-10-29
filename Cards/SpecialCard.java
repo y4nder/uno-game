@@ -13,6 +13,9 @@ public class SpecialCard extends UnoCard{
     }
 
     public String showCard(){
+        if(color.equals(Color.WILD)){
+            return "WILD " + type; 
+        }
         return super.showCard() + " " + type;
     }
 }
