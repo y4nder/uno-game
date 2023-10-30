@@ -31,84 +31,71 @@ public class UnoGame extends CardValidity {
     }
 
     public void PlayUno(Player currentPlayer, UnoCard currentCard){
-        type("\n--------------------------------------------------"); 
-        if(aNormalCard(currentCard)){
-            
-            type("Top card is a " + currentCard.toString());
-            type();
-            type(currentPlayer.getPlayerName().toUpperCase() + "'s turn");
-            UnoCard toThrow = currentPlayer.throwCard(currentCard);
-
-            if(toThrow != null){
-                currentCard = toThrow;
-                table.addToTableDeck(currentCard);
-                type(currentPlayer.getPlayerName() + " throws a " + toThrow.toString());
-
-                if(aDrawFour(currentCard)){
-                    Color choice = currentPlayer.chooseColor();
-                    currentCard = new SpecialCard(choice, SpecialType.DRAWFOUR);
-                }
-
-                if(currentPlayer.hasNoMoreCards()){
-                    type("\n" + currentPlayer.getPlayerName() + " won!");
-                    return;
-                }
-
-                if(currentPlayer.uno()){
-                    type(currentPlayer.getPlayerName() + " yells UNO!");
-                }
-
-            }
-            else{
-                type(currentPlayer.getPlayerName() + " does not have any playable cards");
-                type(currentPlayer.getPlayerName() + " will draw 1 card");
-                UnoCard drawn = distributeOneCard();
-                currentPlayer.addACard(drawn);
-                if(isValid(drawn, currentCard)){
-                    PlayUno(currentPlayer, currentCard);
-                    return;
-                }
-            }
-
-            PlayUno(r.rotate(currentPlayer), currentCard);
-
-        }
-        else{    
-            //if draw two
-            if(aDrawTwo(currentCard)){
-                distributeCards(2, currentPlayer);
-                type("\n" + currentPlayer.getPlayerName() + " draws 2 cards and LOSES their Turn");
-                PlayUno(r.rotate(currentPlayer), new NormalCard(currentCard.getColor(), 99));
-            }
-
-            //if reverse
-            if(aReverse(currentCard)){
-                type("\nThe rotation is reversed 🔀");
-                if(r instanceof RotateLeft){
-                    r = new RotateRight();
+        while (true) {
+            type("\n--------------------------------------------------"); 
+            if(aNormalCard(currentCard)){
+                type("Top card is a " + currentCard.toString());
+                type();
+                type(currentPlayer.getPlayerName().toUpperCase() + "'s turn");
+                UnoCard toThrow = currentPlayer.throwCard(currentCard);
+                if(toThrow != null){
+                    currentCard = toThrow;
+                    table.addToTableDeck(currentCard);
+                    type(currentPlayer.getPlayerName() + " throws a " + toThrow.toString());
+                    if(aDrawFour(currentCard)){
+                        Color choice = currentPlayer.chooseColor();
+                        currentCard = new SpecialCard(choice, SpecialType.DRAWFOUR);
+                    }
+                    if(currentPlayer.hasNoMoreCards()){
+                        type("\n" + currentPlayer.getPlayerName() + " won!");
+                        return;
+                    }
+                    if(currentPlayer.uno()){
+                        type(currentPlayer.getPlayerName() + " yells UNO!");
+                    }
                 }
                 else{
-                    r = new RotateLeft();
+                    type(currentPlayer.getPlayerName() + " does not have any playable cards");
+                    type(currentPlayer.getPlayerName() + " will draw 1 card");
+                    UnoCard drawn = distributeOneCard();
+                    currentPlayer.addACard(drawn);
+                    if(isValid(drawn, currentCard)){
+                        continue;
+                    }
                 }
-                PlayUno(r.rotate(r.rotate(currentPlayer)), new NormalCard(currentCard.getColor(), 99));
+                currentPlayer = r.rotate(currentPlayer);
             }
-            
-            //if skip
-            if(aSkip(currentCard)){
-                type("\n" + currentPlayer.getPlayerName() + " was skipped, they LOSE their turn");
-                PlayUno(r.rotate(r.rotate(currentPlayer)), new NormalCard(currentCard.getColor(), 99));
-            }
-            
-            //if wild draw four
-            if(aDrawFour(currentCard)){
-                distributeCards(4, currentPlayer);
-                type("\n" +  currentPlayer.getPlayerName() + " draws 4 cards and LOSES their turn");
-                currentCard = new NormalCard(currentCard.getColor(), 99);
-                PlayUno(r.rotate(currentPlayer), currentCard);
+            else{
+                if(aDrawTwo(currentCard)){
+                    distributeCards(2, currentPlayer);
+                    type("\n" + currentPlayer.getPlayerName() + " draws 2 cards and LOSES their Turn");
+                    currentCard = new NormalCard(currentCard.getColor(), 99);
+                    currentPlayer = r.rotate(currentPlayer);
+                }
+                else if(aReverse(currentCard)){
+                    type("\nThe rotation is reversed 🔀");
+                    if(r instanceof RotateLeft){
+                        r = new RotateRight();
+                    }
+                    else{
+                        r = new RotateLeft();
+                    }
+                    currentPlayer = r.rotate(r.rotate(currentPlayer));
+                    currentCard = new NormalCard(currentCard.getColor(), 99);
+                }
+                else if(aSkip(currentCard)){
+                    type("\n" + currentPlayer.getPlayerName() + " was skipped, they LOSE their turn");
+                    currentPlayer = r.rotate(r.rotate(currentPlayer));
+                    currentCard = new NormalCard(currentCard.getColor(), 99);
+                }
+                else if(aDrawFour(currentCard)){
+                    distributeCards(4, currentPlayer);
+                    type("\n" +  currentPlayer.getPlayerName() + " draws 4 cards and LOSES their turn");
+                    currentCard = new NormalCard(currentCard.getColor(), 99);
+                    currentPlayer = r.rotate(currentPlayer);
+                }
             }
         }
-
-        return;
     }
 
     //helper method
