@@ -6,8 +6,8 @@ import java.util.Deque;
 import UnoGameFiles.Cards.UnoCard;
 
 public class Table {
-    private Deque<UnoCard> tableDeck = new ArrayDeque<>();
-    
+    private final Deque<UnoCard> tableDeck = new ArrayDeque<>();
+
     public void addToTableDeck(UnoCard u){
         tableDeck.push(u);
     }
@@ -17,15 +17,14 @@ public class Table {
     }
 
     public Deque<UnoCard> returnCards(){
-        Deque<UnoCard> toReturn = new ArrayDeque<>();
-        toReturn.addAll(tableDeck);
-        tableDeck = new ArrayDeque<>();
+        Deque<UnoCard> toReturn = new ArrayDeque<>(tableDeck);
+        tableDeck.clear();
         tableDeck.add(toReturn.pollFirst());
         return toReturn;
     }
 
-    public void showTable(){
-        System.out.println(tableDeck);
+    public String showTable(){
+        return tableDeck.toString();
     }
 
     public Deque<UnoCard> getTableDeck(){
