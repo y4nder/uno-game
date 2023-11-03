@@ -11,7 +11,7 @@ public class UnoTest {
         Player p4 = new Cpu("Red");
         Player p5 = new Cpu("Yams");
         Player p6 = new Cpu("Wenz");
-        Player p7 = new Cpu("Aaron");
+        Player p7 = new Cpu("Leander");
         Player p8 = new Cpu("Herv");
         Player p9 = new Cpu("Mirai");
         Player p10 = new Cpu("Micah");

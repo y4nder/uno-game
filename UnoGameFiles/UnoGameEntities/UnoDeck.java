@@ -9,8 +9,6 @@ import UnoGameFiles.Misc.CardAdder.AddSpecialCard;
 
 public class UnoDeck {
     private Deque<UnoCard> unoDeck;
-    private CardAdder cAdder;
-
     private static final int ONE_COPY = 1;
     private static final int TWO_COPIES = 2;
     private static final int FOUR_COPIES = 4;
@@ -30,22 +28,23 @@ public class UnoDeck {
     }
     
     private void generateAllCards(){
+        CardAdder addStrategy = new AddNormalCard();
         EnumSet<Color> colors = EnumSet.complementOf(EnumSet.of(Color.WILD));
         EnumSet<SpecialType> specialTypes = EnumSet.complementOf(EnumSet.of(SpecialType.DRAWFOUR));
         for(Color ofColored : colors){
 
-            this.cAdder = new AddNormalCard();
-            cAdder.addTo(unoDeck, ONE_COPY, ofColored, ZERO);                   
+            addStrategy = new AddNormalCard();
+            addStrategy.addTo(unoDeck, ONE_COPY, ofColored, ZERO);                   
             for(int faceValue = ONE; faceValue <= NINE; faceValue++){
-                cAdder.addTo(unoDeck, TWO_COPIES, ofColored, faceValue);        
+                addStrategy.addTo(unoDeck, TWO_COPIES, ofColored, faceValue);        
             }
             
-            this.cAdder = new AddSpecialCard();
+            addStrategy = new AddSpecialCard();
             for(SpecialType specialType : specialTypes){  
-                cAdder.addTo(unoDeck, TWO_COPIES, ofColored, specialType);                
+                addStrategy.addTo(unoDeck, TWO_COPIES, ofColored, specialType);                
             }
         }
-        cAdder.addTo(unoDeck, FOUR_COPIES, Color.WILD, SpecialType.DRAWFOUR);
+        addStrategy.addTo(unoDeck, FOUR_COPIES, Color.WILD, SpecialType.DRAWFOUR);
     }
     
     public List<String> displayDeck(){
@@ -57,6 +56,7 @@ public class UnoDeck {
     }
 
     public void shuffeDeck(){
+        System.out.println("Shuffling the Uno Deck");
         List<UnoCard> tempList = new ArrayList<>(unoDeck);
         Collections.shuffle(tempList);
         unoDeck = new ArrayDeque<>(tempList);

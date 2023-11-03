@@ -2,10 +2,10 @@ package UnoGameFiles.Misc;
 
 import UnoGameFiles.UnoGameEntities.Player;
 
-public class RotateRight implements Rotation{
+public class LeftRotation implements RotationState{
 
     @Override
     public Player rotate(Player currentPlayer) {
-        return currentPlayer.getPlayerRight();
-    }    
+        return currentPlayer.getPlayerLeft();
+    }
 }

@@ -10,7 +10,10 @@ public class UnoGame extends CardValidity {
     private UnoDeck unoDeck;
     private Table table;
     private Player startingPlayer;
-    static int gameSpeed = 0;
+
+    private static final int GAME_SPEED = 0;
+    private static final int START_CARD_COUNT = 7;
+    private static final int ANY_CARD = 99;
 
     public UnoGame(List<Player> allPlayers){
         this.startingPlayer = getFirstPlayerInRotationFrom(allPlayers);
@@ -19,9 +22,9 @@ public class UnoGame extends CardValidity {
     }
 
     public Player getFirstPlayerInRotationFrom(List<Player> allPlayers){
-        RotationSetup r = new RotationSetup();
-        r.setTheRotationOf(allPlayers);
-        return r.getFirstPlayer();
+        RotationSetup rSetup = new RotationSetup();
+        rSetup.setTheRotationOf(allPlayers);
+        return rSetup.getFirstPlayer();
     }
 
     //early game
@@ -33,7 +36,7 @@ public class UnoGame extends CardValidity {
     }
 
     public void PlayUno(Player currentPlayer, UnoCard currentCard){
-        Rotation r = new RotateLeft();
+        RotationState rState = new LeftRotation();
         boolean gameFinished = false;
         while (!gameFinished) {
             type("\n--------------------------------------------------"); 
@@ -62,44 +65,46 @@ public class UnoGame extends CardValidity {
                     type(currentPlayer.getPlayerName() + " does not have any playable cards");
                     type(currentPlayer.getPlayerName() + " will draw 1 card");
                     UnoCard drawn = distributeOneCard();
-                    currentPlayer.addACard(drawn);
+                    currentPlayer.addACard(distributeOneCard());
                     if(isValid(drawn, currentCard)){
                         continue;
                     }
                 }
-                currentPlayer = r.rotate(currentPlayer);
+                currentPlayer = rState.rotate(currentPlayer);
             }
             else{
                 if(aDrawTwo(currentCard)){
                     distributeCards(2, currentPlayer);
                     type("\n" + currentPlayer.getPlayerName() + " draws 2 cards and LOSES their Turn");
-                    currentCard = new NormalCard(currentCard.getColor(), 99);
-                    currentPlayer = r.rotate(currentPlayer);
+                    currentCard = new NormalCard(currentCard.getColor(), ANY_CARD);
+                    currentPlayer = rState.rotate(currentPlayer);
                 }
                 else if(aReverse(currentCard)){
-                    type("\nThe rotation is reversed 🔀");
-                    if(r instanceof RotateLeft){
-                        r = new RotateRight();
+                    type("\nThe rotation is reversed");
+                    if(rState instanceof LeftRotation){
+                        rState = new RightRotation();
                     }
                     else{
-                        r = new RotateLeft();
+                        rState = new LeftRotation();
                     }
-                    currentPlayer = r.rotate(r.rotate(currentPlayer));
-                    currentCard = new NormalCard(currentCard.getColor(), 99);
+                    currentPlayer = rState.rotate(rState.rotate(currentPlayer));
+                    currentCard = new NormalCard(currentCard.getColor(), ANY_CARD);
                 }
                 else if(aSkip(currentCard)){
                     type("\n" + currentPlayer.getPlayerName() + " was skipped, they LOSE their turn");
-                    currentPlayer = r.rotate(r.rotate(currentPlayer));
-                    currentCard = new NormalCard(currentCard.getColor(), 99);
+                    currentPlayer = rState.rotate(rState.rotate(currentPlayer));
+                    currentCard = new NormalCard(currentCard.getColor(), ANY_CARD);
                 }
                 else if(aDrawFour(currentCard)){
                     distributeCards(4, currentPlayer);
                     type("\n" +  currentPlayer.getPlayerName() + " draws 4 cards and LOSES their turn");
-                    currentCard = new NormalCard(currentCard.getColor(), 99);
-                    currentPlayer = r.rotate(currentPlayer);
+                    currentCard = new NormalCard(currentCard.getColor(), ANY_CARD);
+                    currentPlayer = rState.rotate(currentPlayer);
                 }
             }
         }
+        type();
+        viewPlayersCards();
         return;
     }
 
@@ -108,14 +113,16 @@ public class UnoGame extends CardValidity {
         Player first = start;
         Player current = first;
         do{
-            distributeCards(7, current);
-            current = current.getPlayerRight();
+            type("distributing 7 cards to " + current.getPlayerName());
+            distributeCards(START_CARD_COUNT, current);
+            current = current.getPlayerLeft();
         }
         while(!current.equals(first));
     }
 
     public UnoCard drawFirstCard(){
-        UnoCard firstDraw = null;
+        type("Drawing First Card....");
+        UnoCard firstDraw;
         do{
             firstDraw = unoDeck.drawOne();
             table.addToTableDeck(firstDraw);            
@@ -127,7 +134,7 @@ public class UnoGame extends CardValidity {
 
     public boolean validStartCard(UnoCard u){
         if(u instanceof SpecialCard){
-            System.out.println("first draw was a " + u.toString());
+            type("first draw was a " + u.toString());
             type();
             type("Drawing first card again");
             return false;
@@ -140,18 +147,25 @@ public class UnoGame extends CardValidity {
         type();
     }
 
-    public void type(String string){
-        for(int i = 0; i < string.length(); i++)
-        {
-            System.out.print(string.charAt(i));
-            try{
-                Thread.sleep(gameSpeed); 
-            } 
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+    public void viewPlayersCards(){
+        Player first = startingPlayer;
+        Player current = first;
+        type("----PLAYER CARDS----");
+        do{
+            current.showMyCards();
+            current = current.getPlayerLeft();
         }
-        System.out.println();
+        while(!current.equals(first));
+    }
+
+    public void type(String string){
+        System.out.println(string);
+        try{
+            Thread.sleep(GAME_SPEED); 
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void type(){
@@ -181,7 +195,8 @@ public class UnoGame extends CardValidity {
 
     public void distributeCards(int howMany, Player currentPlayer){
         if(unoDeck.notEnoughCards(howMany)){
-            type("retrieving cards");
+            type("\n not enough cards in deck to distribute " + howMany);
+            type("retrieving cards from table");
             unoDeck.retrieveCards(table.returnCards());
         }
         unoDeck.giveCards(howMany, currentPlayer);
@@ -189,6 +204,7 @@ public class UnoGame extends CardValidity {
 
     public UnoCard distributeOneCard(){
         if(unoDeck.notEnoughCards(1)){
+            type("\n not enough cards in deck to distribute one");
             type("retrieving cards");
             unoDeck.retrieveCards(table.returnCards());
         }

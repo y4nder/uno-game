@@ -14,6 +14,7 @@ public class User extends Player{
         boolean validity = false;
         UnoCard u = null;
         showMyCards();
+        System.out.println("  [0] : draw one");
         do{
             int index = getInput("  Choose card: ");
             if(index == 'x') return null;

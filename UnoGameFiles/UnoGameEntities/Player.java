@@ -63,7 +63,7 @@ public abstract class Player extends CardValidity{
     //methods
     public void showMyCards(){
         if(myCards.size() == 0){
-            System.out.println("no cards");
+            System.out.println("\n" + playerName + " has no more cards (winner)");
             return;
         }
 
@@ -73,7 +73,7 @@ public abstract class Player extends CardValidity{
             System.out.println("  [" + (i + 1) + "] - " + u.toString());
             i++;
         }
-        System.out.println("  [0] : draw one");
+
     }
 
     public void giveBackCard(UnoCard u){
