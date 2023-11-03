@@ -3,9 +3,20 @@ package UnoGameFiles.UnoGameEntities;
 import java.util.*;
 import UnoGameFiles.Cards.*;
 import UnoGameFiles.Cards.CardAttributes.*;
+import UnoGameFiles.Misc.CardAdder;
+import UnoGameFiles.Misc.CardAdder.AddNormalCard;
+import UnoGameFiles.Misc.CardAdder.AddSpecialCard;
 
 public class UnoDeck {
-    private Deque<UnoCard> unoDeck = new ArrayDeque<>();
+    private Deque<UnoCard> unoDeck;
+    private CardAdder cAdder;
+
+    private static final int ONE_COPY = 1;
+    private static final int TWO_COPIES = 2;
+    private static final int FOUR_COPIES = 4;
+    private static final int ZERO = 0;
+    private static final int NINE = 9;
+    private static final int ONE = 1;
 
     public UnoDeck(){
 
@@ -14,94 +25,35 @@ public class UnoDeck {
          * https://www.unovariations.com/official-uno-rules#:~:text=A%20standard%20deck%20of%20Uno,blue%2C%20green%2C%20and%20yellow)
         */
 
-        //red
-        UnoCard r0 = new NormalCard(Color.RED, 0);
-        List<UnoCard> redFaceValueCards = new ArrayList<>();
-        redFaceValueCards.add(r0);
-        for(int j = 0; j < 2; j++){
-            for(int i = 1; i <= 9; i++){
-                redFaceValueCards.add(new NormalCard(Color.RED, i));
-            }
-        }
-    
-        //blue
-        NormalCard b0 = new NormalCard(Color.BLUE, 0);
-        List<UnoCard> blueFaceValueCards = new ArrayList<>();
-        blueFaceValueCards.add(b0);
-        for(int i = 0; i < 2; i++){
-            for(int j = 1; j <= 9; j++){
-                blueFaceValueCards.add(new NormalCard(Color.BLUE, j));
-            }
-        }
-        //green
-        NormalCard g0 = new NormalCard(Color.GREEN, 0);
-        List<UnoCard> greenFaceValueCards = new ArrayList<>();
-        greenFaceValueCards.add(g0);
-        for(int i = 0; i < 2; i++){
-            for(int j = 1; j <= 9; j++){
-                greenFaceValueCards.add(new NormalCard(Color.GREEN, j));
-            }
-        }
-        
-        //yellow
-        NormalCard y0 = new NormalCard(Color.YELLOW, 0);
-        List<UnoCard> yellowFaceValueCards = new ArrayList<>();
-        yellowFaceValueCards.add(y0);
-        for(int i = 0; i < 2; i++){
-            for(int j = 1; j <= 9; j++){
-                yellowFaceValueCards.add(new NormalCard(Color.YELLOW, j));
-            }
-        }
-    
-        //special cards
-        //skip
-        List<UnoCard> skips = new ArrayList<>();
-        for(Color c : Color.values()){
-            for(int i = 0; i < 2; i++){
-                if(c.equals(Color.WILD)) continue;
-                skips.add(new SpecialCard(c, SpecialType.SKIP));
-            }
-        }
-        
-        //draw 2
-        List<UnoCard> draw2s = new ArrayList<>();
-        for(Color c : Color.values()){
-            for(int i = 0; i < 2; i++){
-                if(c.equals(Color.WILD)) continue;
-                draw2s.add(new SpecialCard(c, SpecialType.DRAWTWO));
-            }
-        }
-        
-        //reverse
-        List<SpecialCard> reverse = new ArrayList<>();
-        for(Color c: Color.values()){
-            for(int i = 0; i < 2; i++){
-                if(c.equals(Color.WILD)) continue;
-                reverse.add(new SpecialCard(c, SpecialType.REVERSE));
-            }
-        }
-        
-        //draw 4
-        List<SpecialCard> wild4 = new ArrayList<>();
-        for(int i = 0; i < 4; i++){
-            wild4.add(new SpecialCard(Color.WILD, SpecialType.DRAWFOUR));
-        }
-
-        unoDeck.addAll(redFaceValueCards);
-        unoDeck.addAll(greenFaceValueCards);
-        unoDeck.addAll(blueFaceValueCards);
-        unoDeck.addAll(yellowFaceValueCards);
-        unoDeck.addAll(skips);
-        unoDeck.addAll(reverse);
-        unoDeck.addAll(draw2s);
-        unoDeck.addAll(wild4);
+        this.unoDeck = new ArrayDeque<>();
+        generateAllCards();
     }
+    
+    private void generateAllCards(){
+        EnumSet<Color> colors = EnumSet.complementOf(EnumSet.of(Color.WILD));
+        EnumSet<SpecialType> specialTypes = EnumSet.complementOf(EnumSet.of(SpecialType.DRAWFOUR));
+        for(Color ofColored : colors){
 
-    public void displayDeck(){
-        for(UnoCard u : unoDeck){
-            System.out.println(u.toString());
-            System.out.println();
+            this.cAdder = new AddNormalCard();
+            cAdder.addTo(unoDeck, ONE_COPY, ofColored, ZERO);                   
+            for(int faceValue = ONE; faceValue <= NINE; faceValue++){
+                cAdder.addTo(unoDeck, TWO_COPIES, ofColored, faceValue);        
+            }
+            
+            this.cAdder = new AddSpecialCard();
+            for(SpecialType specialType : specialTypes){  
+                cAdder.addTo(unoDeck, TWO_COPIES, ofColored, specialType);                
+            }
         }
+        cAdder.addTo(unoDeck, FOUR_COPIES, Color.WILD, SpecialType.DRAWFOUR);
+    }
+    
+    public List<String> displayDeck(){
+        List<String> deck = new ArrayList<>();
+        for(UnoCard u : unoDeck){
+            deck.add(u.toString() + "\n");
+        }
+        return deck;
     }
 
     public void shuffeDeck(){
@@ -148,4 +100,10 @@ public class UnoDeck {
     public boolean notEnoughCards(int howMany){
         return unoDeck.size() < howMany;
     }
+
+    // public static void main(String[] args) {
+    //     UnoDeck u = new UnoDeck();
+    //     System.out.println(u.displayDeck());
+    //     System.out.println(u.cardCount());
+    // }
 }

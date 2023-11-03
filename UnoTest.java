@@ -5,7 +5,7 @@ public class UnoTest {
     public static void main(String[] args){
         //max players 10
         //min players 2
-        Player p1 = new User("Russell");
+        Player p1 = new Cpu("Russell");
         Player p2 = new Cpu("Bianca");
         Player p3 = new Cpu("Eren");
         Player p4 = new Cpu("Red");
