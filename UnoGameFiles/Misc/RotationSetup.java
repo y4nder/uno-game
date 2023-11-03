@@ -12,7 +12,7 @@ public class RotationSetup {
         firstPlayer = lastPlayer = null;
     }
 
-    public void setupPlayers(List<Player> allPlayers){
+    public void setTheRotationOf(List<Player> allPlayers){
         if(allPlayers == null) return;
 
         firstPlayer = lastPlayer = allPlayers.get(0);

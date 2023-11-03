@@ -10,16 +10,18 @@ public class UnoGame extends CardValidity {
     private UnoDeck unoDeck;
     private Table table;
     private Player startingPlayer;
-    private Rotation r;
     static int gameSpeed = 0;
 
     public UnoGame(List<Player> allPlayers){
-        RotationSetup rSetup = new RotationSetup();
-        rSetup.setupPlayers(allPlayers);
-        startingPlayer = rSetup.getFirstPlayer();
-        unoDeck = new UnoDeck();
-        table = new Table();
-        r = new RotateLeft();
+        this.startingPlayer = getFirstPlayerInRotationFrom(allPlayers);
+        this.unoDeck = new UnoDeck();
+        this.table = new Table();
+    }
+
+    public Player getFirstPlayerInRotationFrom(List<Player> allPlayers){
+        RotationSetup r = new RotationSetup();
+        r.setTheRotationOf(allPlayers);
+        return r.getFirstPlayer();
     }
 
     //early game
@@ -31,7 +33,9 @@ public class UnoGame extends CardValidity {
     }
 
     public void PlayUno(Player currentPlayer, UnoCard currentCard){
-        while (true) {
+        Rotation r = new RotateLeft();
+        boolean gameFinished = false;
+        while (!gameFinished) {
             type("\n--------------------------------------------------"); 
             if(aNormalCard(currentCard)){
                 type("Top card is a " + currentCard.toString());
@@ -48,7 +52,7 @@ public class UnoGame extends CardValidity {
                     }
                     if(currentPlayer.hasNoMoreCards()){
                         type("\n" + currentPlayer.getPlayerName() + " won!");
-                        return;
+                        gameFinished = true;
                     }
                     if(currentPlayer.uno()){
                         type(currentPlayer.getPlayerName() + " yells UNO!");
@@ -96,6 +100,7 @@ public class UnoGame extends CardValidity {
                 }
             }
         }
+        return;
     }
 
     //helper method
