@@ -21,7 +21,7 @@ public class UnoGame extends CardValidity {
         this.table = new Table();
     }
 
-    public Player getFirstPlayerInRotationFrom(List<Player> allPlayers){
+    private Player getFirstPlayerInRotationFrom(List<Player> allPlayers){
         RotationSetup rSetup = new RotationSetup();
         rSetup.setTheRotationOf(allPlayers);
         return rSetup.getFirstPlayer();
@@ -35,7 +35,7 @@ public class UnoGame extends CardValidity {
         PlayUno(startingPlayer, startCard);
     }
 
-    public void PlayUno(Player currentPlayer, UnoCard currentCard){
+    private void PlayUno(Player currentPlayer, UnoCard currentCard){
         RotationState rState = new LeftRotation();
         boolean gameFinished = false;
         while (!gameFinished) {
@@ -109,7 +109,7 @@ public class UnoGame extends CardValidity {
     }
 
     //helper method
-    public void giveStartingCards(Player start){
+    private void giveStartingCards(Player start){
         Player first = start;
         Player current = first;
         do{
@@ -120,7 +120,7 @@ public class UnoGame extends CardValidity {
         while(!current.equals(first));
     }
 
-    public UnoCard drawFirstCard(){
+    private UnoCard drawFirstCard(){
         type("Drawing First Card....");
         UnoCard firstDraw;
         do{
@@ -132,7 +132,7 @@ public class UnoGame extends CardValidity {
         return firstDraw;
     }
 
-    public boolean validStartCard(UnoCard u){
+    private boolean validStartCard(UnoCard u){
         if(u instanceof SpecialCard){
             type("first draw was a " + u.toString());
             type();
@@ -142,12 +142,12 @@ public class UnoGame extends CardValidity {
         return true;
     }
 
-    public void showCardFromTable(){
+    private void showCardFromTable(){
         System.out.println("Top Card is a " + table.getTopCard().toString());
         type();
     }
 
-    public void viewPlayersCards(){
+    private void viewPlayersCards(){
         Player first = startingPlayer;
         Player current = first;
         type("----PLAYER CARDS----");
@@ -158,7 +158,7 @@ public class UnoGame extends CardValidity {
         while(!current.equals(first));
     }
 
-    public void type(String string){
+    private void type(String string){
         System.out.println(string);
         try{
             Thread.sleep(GAME_SPEED); 
@@ -168,32 +168,32 @@ public class UnoGame extends CardValidity {
         }
     }
 
-    public void type(){
+    private void type(){
         System.out.println();
     }
 
     //comparison methods
-    public boolean aNormalCard(UnoCard u){
+    private boolean aNormalCard(UnoCard u){
         return u instanceof NormalCard;
     }
 
-    public boolean aDrawFour(UnoCard u){
+    private boolean aDrawFour(UnoCard u){
         return u instanceof SpecialCard && ((SpecialCard) u).getType().equals(SpecialType.DRAWFOUR);
     }
 
-    public boolean aDrawTwo(UnoCard u){
+    private boolean aDrawTwo(UnoCard u){
         return ((SpecialCard)u).getType().equals(SpecialType.DRAWTWO);
     }
 
-    public boolean aReverse(UnoCard u){
+    private boolean aReverse(UnoCard u){
         return ((SpecialCard)u).getType().equals(SpecialType.REVERSE);
     }
 
-    public boolean aSkip(UnoCard u){
+    private boolean aSkip(UnoCard u){
         return ((SpecialCard)u).getType().equals(SpecialType.SKIP);
     }
 
-    public void distributeCards(int howMany, Player currentPlayer){
+    private void distributeCards(int howMany, Player currentPlayer){
         if(unoDeck.notEnoughCards(howMany)){
             type("\n not enough cards in deck to distribute " + howMany);
             type("retrieving cards from table");
@@ -202,7 +202,7 @@ public class UnoGame extends CardValidity {
         unoDeck.giveCards(howMany, currentPlayer);
     }
 
-    public UnoCard distributeOneCard(){
+    private UnoCard distributeOneCard(){
         if(unoDeck.notEnoughCards(1)){
             type("\n not enough cards in deck to distribute one");
             type("retrieving cards");
